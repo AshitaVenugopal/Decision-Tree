@@ -1,0 +1,26 @@
+library("rpart")
+library("rpart.plot")
+df.titanic <- read.csv('Path to file')
+titanic_dt <- df.train
+fit <- rpart(Survived ~ Pclass + Sex + Age , df.train , method = "class")
+plot_fit <- plot(fit, uniform = TRUE , main = "Classification Tree For Titanic")
+rpart.plot(fit)
+
+#random forest 
+
+install.packages(randomForest)
+library(randomForest)
+rf = randomForest(Survived ~ Pclass + Sex + Age , data = df.train , importance = TRUE , mtry =2 )  
+print(rf)
+summary(rf)
+
+df.train$prob <- predict(rf, newdata = df.train,  type=c("response"))
+df.train$spred <- ifelse(df.train$prob>=.5,'pred_yes','pred_no')
+table(df.train$spred,df.train$Survived)
+
+#SVM
+install.packages("e1071")
+library("e1071")
+sv = svm(Survived ~ Pclass + Sex + Age , data = df.train , importance = TRUE , mtry =2 )  
+print(rf)
+summary(rf)
